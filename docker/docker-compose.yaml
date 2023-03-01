@@ -1,5 +1,21 @@
 version: '3.9'
+
+volumes:
+  prometheus-data:
+    driver: local
+
 services:
+  prometheus:
+      build:
+        dockerfile: ./docker/prometheus/Dockerfile
+      image: prom/prometheus:latest
+      container_name: prometheus
+      ports:
+        - "9090:9090"
+      volumes:
+        - prometheus-data:/prometheus
+      restart: unless-stopped
+        
   data_generator:
     build: 
       context: ../
