@@ -1,17 +1,26 @@
-from prometheus_client import start_http_server, Summary, Gauge, Counter, MetricsHandler
+from fastapi import FastAPI
+from pydantic import BaseModel
+from fastapi.responses import PlainTextResponse
+
+from prometheus_client import Gauge, Summary, generate_latest
 import random
 import time
+import requests
 
+app = FastAPI()
 
-def process_request(t):
-    """A dummy function that takes some time."""
-    time.sleep(t)
+metricsOutput = Gauge('device_health', 'device_health', ['id'])
 
-if __name__ == '__main__':
-    g = Gauge('harddrive_health', 'Health of harddrive', ['id'])
-    # Start up the server to expose the metrics.
-    start_http_server(8003)
-    while True:
-        process_request(random.random())
-        g.labels(id='1234').inc()      # Increment by 1
-        g.labels(id='1235').inc()
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+@app.get("/metrics")
+def metrics():
+    i = 0
+    while i < 10 :
+        inputDevice = requests.get("http://localhost:8000/get_record").json()
+        pred = requests.post("http://localhost:8001/predict", json=inputDevice)
+        metricsOutput.labels(id = f"{i}").set(pred.json()['failure_prediction'])
+        i = i+1
+    return PlainTextResponse(generate_latest(metricsOutput))

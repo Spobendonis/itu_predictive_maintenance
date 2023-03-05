@@ -24,12 +24,12 @@ def health():
 @app.get("/metrics")
 def metrics():
     i = 0
-    while i < 1000 :
-        inputDevice = requests.get("http://localhost:8000/get_record").json()
-        pred = requests.post("http://localhost:8001/predict", json=inputDevice)
+    while i < 10 :
+        inputDevice = requests.get("http://host.docker.internal:8000/get_record").json()
+        pred = requests.post("http://host.docker.internal:8001/predict", json=inputDevice)
         metricsOutput.labels(id = f"{i}").set(pred.json()['failure_prediction'])
         i = i+1
-    return generate_latest(metricsOutput)
+    return PlainTextResponse(generate_latest(metricsOutput))
 
 @app.post("/predict/", response_model=Prediction)
 def predict(data: dict):
