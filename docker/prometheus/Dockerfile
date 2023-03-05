@@ -1,2 +1,2 @@
 FROM prom/prometheus
-ADD prometheus.yml /etc/prometheus/
+ADD ./docker/prometheus/prometheus.yml /etc/prometheus/
