@@ -1,3 +1,7 @@
+# run 
+# docker compose -f docker/docker-compose.yaml build data_generator 
+# whenever this file is changed
+
 import os
 import random
 
