@@ -20,7 +20,7 @@ class Prediction(BaseModel):
     failure_prediction: float
 
 metricsOutput = Gauge('device_health', 'Device Health (lower is better)', [
-                      'id', 'model'])
+                      'serial_number', 'model'])
 
 @app.get("/health")
 def health():
@@ -31,7 +31,7 @@ def metrics():
     for i in range(10):
         # get a random record
         inputDevice = requests.get("http://host.docker.internal:8000/get_record").json()
-        id = inputDevice["id"]
+        serial_number = inputDevice["serial_number"]
         model = inputDevice["model"]
 
         # remove identifying info for the machine learning model
@@ -41,7 +41,7 @@ def metrics():
 
         # give record to machine learning model
         pred = requests.post("http://host.docker.internal:8001/predict", json=inputDevice)
-        metricsOutput.labels(id, model).set(
+        metricsOutput.labels(serial_number, model).set(
             pred.json()['failure_prediction'])
     # update the gauge and show the output as text
     return PlainTextResponse(generate_latest(metricsOutput))
