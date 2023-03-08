@@ -1,5 +1,5 @@
-# run 
-# docker compose -f docker/docker-compose.yaml build anomaly_detector 
+# run
+# docker compose -f docker/docker-compose.yaml build anomaly_detector
 # whenever this file is changed
 
 from fastapi import FastAPI

@@ -8,7 +8,7 @@ This repository contains three components.
 ### A postgres database
 The database is used as a backend for storing data for the data generator
 ### A data generator REST service
-The REST services provides log messages upon make a regquest. 
+The REST services provides log messages upon make a regquest.
 ### A REST endpoint for prediction
 The REST endpoint for prediction takes a json as input and predicts the probability that the harddrive is failing. Optinally a threshold for anomalies can be provided.
 ## Running the code
@@ -19,9 +19,9 @@ git lfs fetch
 git lfs checkout
 ```
 
-From the root of the project (same folder as the readme), run 
+From the root of the project (same folder as the readme), run
 ```bash
-docker-compose -f docker/docker-compose.yaml up   
+docker-compose -f docker/docker-compose.yaml up
 ```
 Alternatively you can use the make command (requires make)
 ```bash
